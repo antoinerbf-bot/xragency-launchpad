@@ -9,38 +9,241 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReferencesRouteImport } from './routes/references'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BundlesRouteImport } from './routes/bundles'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SolutionsIndexRouteImport } from './routes/solutions.index'
+import { Route as SolutionsSeoArmadaRouteImport } from './routes/solutions.seo-armada'
+import { Route as SolutionsIngenierieRouteImport } from './routes/solutions.ingenierie'
+import { Route as SolutionsInfrastructureRouteImport } from './routes/solutions.infrastructure'
+import { Route as SolutionsIaAutomatisationRouteImport } from './routes/solutions.ia-automatisation'
+import { Route as SolutionsGoogleMapsRouteImport } from './routes/solutions.google-maps'
+import { Route as SolutionsCreationSitesRouteImport } from './routes/solutions.creation-sites'
+import { Route as SolutionsCommunityManagementRouteImport } from './routes/solutions.community-management'
+import { Route as SolutionsBrandingRouteImport } from './routes/solutions.branding'
 
+const ReferencesRoute = ReferencesRouteImport.update({
+  id: '/references',
+  path: '/references',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BundlesRoute = BundlesRouteImport.update({
+  id: '/bundles',
+  path: '/bundles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SolutionsIndexRoute = SolutionsIndexRouteImport.update({
+  id: '/solutions/',
+  path: '/solutions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsSeoArmadaRoute = SolutionsSeoArmadaRouteImport.update({
+  id: '/solutions/seo-armada',
+  path: '/solutions/seo-armada',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsIngenierieRoute = SolutionsIngenierieRouteImport.update({
+  id: '/solutions/ingenierie',
+  path: '/solutions/ingenierie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsInfrastructureRoute = SolutionsInfrastructureRouteImport.update({
+  id: '/solutions/infrastructure',
+  path: '/solutions/infrastructure',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsIaAutomatisationRoute =
+  SolutionsIaAutomatisationRouteImport.update({
+    id: '/solutions/ia-automatisation',
+    path: '/solutions/ia-automatisation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SolutionsGoogleMapsRoute = SolutionsGoogleMapsRouteImport.update({
+  id: '/solutions/google-maps',
+  path: '/solutions/google-maps',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsCreationSitesRoute = SolutionsCreationSitesRouteImport.update({
+  id: '/solutions/creation-sites',
+  path: '/solutions/creation-sites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolutionsCommunityManagementRoute =
+  SolutionsCommunityManagementRouteImport.update({
+    id: '/solutions/community-management',
+    path: '/solutions/community-management',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SolutionsBrandingRoute = SolutionsBrandingRouteImport.update({
+  id: '/solutions/branding',
+  path: '/solutions/branding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/bundles': typeof BundlesRoute
+  '/contact': typeof ContactRoute
+  '/references': typeof ReferencesRoute
+  '/solutions/branding': typeof SolutionsBrandingRoute
+  '/solutions/community-management': typeof SolutionsCommunityManagementRoute
+  '/solutions/creation-sites': typeof SolutionsCreationSitesRoute
+  '/solutions/google-maps': typeof SolutionsGoogleMapsRoute
+  '/solutions/ia-automatisation': typeof SolutionsIaAutomatisationRoute
+  '/solutions/infrastructure': typeof SolutionsInfrastructureRoute
+  '/solutions/ingenierie': typeof SolutionsIngenierieRoute
+  '/solutions/seo-armada': typeof SolutionsSeoArmadaRoute
+  '/solutions/': typeof SolutionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/bundles': typeof BundlesRoute
+  '/contact': typeof ContactRoute
+  '/references': typeof ReferencesRoute
+  '/solutions/branding': typeof SolutionsBrandingRoute
+  '/solutions/community-management': typeof SolutionsCommunityManagementRoute
+  '/solutions/creation-sites': typeof SolutionsCreationSitesRoute
+  '/solutions/google-maps': typeof SolutionsGoogleMapsRoute
+  '/solutions/ia-automatisation': typeof SolutionsIaAutomatisationRoute
+  '/solutions/infrastructure': typeof SolutionsInfrastructureRoute
+  '/solutions/ingenierie': typeof SolutionsIngenierieRoute
+  '/solutions/seo-armada': typeof SolutionsSeoArmadaRoute
+  '/solutions': typeof SolutionsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/bundles': typeof BundlesRoute
+  '/contact': typeof ContactRoute
+  '/references': typeof ReferencesRoute
+  '/solutions/branding': typeof SolutionsBrandingRoute
+  '/solutions/community-management': typeof SolutionsCommunityManagementRoute
+  '/solutions/creation-sites': typeof SolutionsCreationSitesRoute
+  '/solutions/google-maps': typeof SolutionsGoogleMapsRoute
+  '/solutions/ia-automatisation': typeof SolutionsIaAutomatisationRoute
+  '/solutions/infrastructure': typeof SolutionsInfrastructureRoute
+  '/solutions/ingenierie': typeof SolutionsIngenierieRoute
+  '/solutions/seo-armada': typeof SolutionsSeoArmadaRoute
+  '/solutions/': typeof SolutionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/bundles'
+    | '/contact'
+    | '/references'
+    | '/solutions/branding'
+    | '/solutions/community-management'
+    | '/solutions/creation-sites'
+    | '/solutions/google-maps'
+    | '/solutions/ia-automatisation'
+    | '/solutions/infrastructure'
+    | '/solutions/ingenierie'
+    | '/solutions/seo-armada'
+    | '/solutions/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/bundles'
+    | '/contact'
+    | '/references'
+    | '/solutions/branding'
+    | '/solutions/community-management'
+    | '/solutions/creation-sites'
+    | '/solutions/google-maps'
+    | '/solutions/ia-automatisation'
+    | '/solutions/infrastructure'
+    | '/solutions/ingenierie'
+    | '/solutions/seo-armada'
+    | '/solutions'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/bundles'
+    | '/contact'
+    | '/references'
+    | '/solutions/branding'
+    | '/solutions/community-management'
+    | '/solutions/creation-sites'
+    | '/solutions/google-maps'
+    | '/solutions/ia-automatisation'
+    | '/solutions/infrastructure'
+    | '/solutions/ingenierie'
+    | '/solutions/seo-armada'
+    | '/solutions/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BundlesRoute: typeof BundlesRoute
+  ContactRoute: typeof ContactRoute
+  ReferencesRoute: typeof ReferencesRoute
+  SolutionsBrandingRoute: typeof SolutionsBrandingRoute
+  SolutionsCommunityManagementRoute: typeof SolutionsCommunityManagementRoute
+  SolutionsCreationSitesRoute: typeof SolutionsCreationSitesRoute
+  SolutionsGoogleMapsRoute: typeof SolutionsGoogleMapsRoute
+  SolutionsIaAutomatisationRoute: typeof SolutionsIaAutomatisationRoute
+  SolutionsInfrastructureRoute: typeof SolutionsInfrastructureRoute
+  SolutionsIngenierieRoute: typeof SolutionsIngenierieRoute
+  SolutionsSeoArmadaRoute: typeof SolutionsSeoArmadaRoute
+  SolutionsIndexRoute: typeof SolutionsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/references': {
+      id: '/references'
+      path: '/references'
+      fullPath: '/references'
+      preLoaderRoute: typeof ReferencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bundles': {
+      id: '/bundles'
+      path: '/bundles'
+      fullPath: '/bundles'
+      preLoaderRoute: typeof BundlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +251,97 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/solutions/': {
+      id: '/solutions/'
+      path: '/solutions'
+      fullPath: '/solutions/'
+      preLoaderRoute: typeof SolutionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/seo-armada': {
+      id: '/solutions/seo-armada'
+      path: '/solutions/seo-armada'
+      fullPath: '/solutions/seo-armada'
+      preLoaderRoute: typeof SolutionsSeoArmadaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/ingenierie': {
+      id: '/solutions/ingenierie'
+      path: '/solutions/ingenierie'
+      fullPath: '/solutions/ingenierie'
+      preLoaderRoute: typeof SolutionsIngenierieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/infrastructure': {
+      id: '/solutions/infrastructure'
+      path: '/solutions/infrastructure'
+      fullPath: '/solutions/infrastructure'
+      preLoaderRoute: typeof SolutionsInfrastructureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/ia-automatisation': {
+      id: '/solutions/ia-automatisation'
+      path: '/solutions/ia-automatisation'
+      fullPath: '/solutions/ia-automatisation'
+      preLoaderRoute: typeof SolutionsIaAutomatisationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/google-maps': {
+      id: '/solutions/google-maps'
+      path: '/solutions/google-maps'
+      fullPath: '/solutions/google-maps'
+      preLoaderRoute: typeof SolutionsGoogleMapsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/creation-sites': {
+      id: '/solutions/creation-sites'
+      path: '/solutions/creation-sites'
+      fullPath: '/solutions/creation-sites'
+      preLoaderRoute: typeof SolutionsCreationSitesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/community-management': {
+      id: '/solutions/community-management'
+      path: '/solutions/community-management'
+      fullPath: '/solutions/community-management'
+      preLoaderRoute: typeof SolutionsCommunityManagementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solutions/branding': {
+      id: '/solutions/branding'
+      path: '/solutions/branding'
+      fullPath: '/solutions/branding'
+      preLoaderRoute: typeof SolutionsBrandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BundlesRoute: BundlesRoute,
+  ContactRoute: ContactRoute,
+  ReferencesRoute: ReferencesRoute,
+  SolutionsBrandingRoute: SolutionsBrandingRoute,
+  SolutionsCommunityManagementRoute: SolutionsCommunityManagementRoute,
+  SolutionsCreationSitesRoute: SolutionsCreationSitesRoute,
+  SolutionsGoogleMapsRoute: SolutionsGoogleMapsRoute,
+  SolutionsIaAutomatisationRoute: SolutionsIaAutomatisationRoute,
+  SolutionsInfrastructureRoute: SolutionsInfrastructureRoute,
+  SolutionsIngenierieRoute: SolutionsIngenierieRoute,
+  SolutionsSeoArmadaRoute: SolutionsSeoArmadaRoute,
+  SolutionsIndexRoute: SolutionsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
