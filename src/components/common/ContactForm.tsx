@@ -19,6 +19,7 @@ export function ContactForm({ source = "contact", defaultService, compact }: Con
     e.preventDefault();
     setLoading(true);
     const fd = new FormData(e.currentTarget);
+    const serviceVal = defaultService ?? (String(fd.get("service") ?? "") || null);
     try {
       const res = await submit({
         data: {
@@ -27,7 +28,7 @@ export function ContactForm({ source = "contact", defaultService, compact }: Con
           phone: String(fd.get("phone") ?? "") || null,
           company: String(fd.get("company") ?? "") || null,
           sector: String(fd.get("sector") ?? "") || null,
-          service: defaultService ?? String(fd.get("service") ?? "") || null,
+          service: serviceVal,
           message: String(fd.get("message") ?? "") || null,
           source,
           language,
