@@ -16,7 +16,6 @@ import {
   Users,
   Bot,
   Search,
-  Globe,
   Zap,
   Clock,
   Calendar,
@@ -37,96 +36,55 @@ interface QuizState {
   urgency: Urgency | null;
 }
 
-interface Recommendation {
+interface RecoMeta {
   packKey: string;
-  title: string;
-  desc: string;
-  price: string;
-  services: string[];
-  badge: string;
+  badgeKey: string;
 }
 
-const SECTORS: { key: Sector; label: string; Icon: typeof Building2 }[] = [
-  { key: "ecommerce", label: "E-commerce", Icon: Store },
-  { key: "restaurant", label: "Restaurant / Hôtellerie", Icon: Utensils },
-  { key: "services", label: "Services B2B / B2C", Icon: Briefcase },
-  { key: "health", label: "Santé / Bien-être", Icon: Heart },
-  { key: "education", label: "Éducation / Formation", Icon: GraduationCap },
-  { key: "other", label: "Autre secteur", Icon: Building2 },
+const SECTORS: { key: Sector; Icon: typeof Building2 }[] = [
+  { key: "ecommerce", Icon: Store },
+  { key: "restaurant", Icon: Utensils },
+  { key: "services", Icon: Briefcase },
+  { key: "health", Icon: Heart },
+  { key: "education", Icon: GraduationCap },
+  { key: "other", Icon: Building2 },
 ];
 
-const GOALS: { key: Goal; label: string; desc: string; Icon: typeof TrendingUp }[] = [
-  { key: "visibility", label: "Plus de visibilité", desc: "SEO, Google Maps, notoriété", Icon: Search },
-  { key: "leads", label: "Plus de prospects", desc: "Génération de leads qualifiés", Icon: Users },
-  { key: "sales", label: "Plus de ventes", desc: "Site optimisé conversion", Icon: TrendingUp },
-  { key: "automation", label: "Automatiser mon business", desc: "IA, chatbots, workflows", Icon: Bot },
+const GOALS: { key: Goal; Icon: typeof TrendingUp }[] = [
+  { key: "visibility", Icon: Search },
+  { key: "leads", Icon: Users },
+  { key: "sales", Icon: TrendingUp },
+  { key: "automation", Icon: Bot },
 ];
 
-const URGENCIES: { key: Urgency; label: string; desc: string; Icon: typeof Clock }[] = [
-  { key: "now", label: "Immédiat", desc: "Je veux démarrer cette semaine", Icon: Zap },
-  { key: "month", label: "Dans le mois", desc: "Planifier sous 30 jours", Icon: Calendar },
-  { key: "quarter", label: "Sous 3 mois", desc: "Préparer en amont", Icon: CalendarRange },
+const URGENCIES: { key: Urgency; Icon: typeof Clock }[] = [
+  { key: "now", Icon: Zap },
+  { key: "month", Icon: Calendar },
+  { key: "quarter", Icon: CalendarRange },
 ];
 
-function recommend(state: QuizState): Recommendation {
+function recommend(state: QuizState): RecoMeta {
   const { goal, urgency, sector } = state;
-
-  // Pack Domination — visibility focus
   if (goal === "visibility") {
     return {
       packKey: "domination",
-      title: "Pack Domination Locale",
-      desc: "SEO Armada + Google Maps Top 3 pour écraser la concurrence locale.",
-      price: "à partir de 1 490€/mois",
-      services: ["SEO Armada", "Google Maps Top 3", "Site optimisé"],
-      badge: urgency === "now" ? "Démarrage rapide" : "Recommandé",
+      badgeKey: urgency === "now" ? "fast" : "recommended",
     };
   }
-
   if (goal === "automation") {
-    return {
-      packKey: "ai",
-      title: "Pack IA & Automatisation",
-      desc: "Chatbot 24/7, qualification auto des leads, gain de productivité massif.",
-      price: "à partir de 990€ + 290€/mois",
-      services: ["Assistant IA", "Automatisations", "Intégrations"],
-      badge: "Innovation",
-    };
+    return { packKey: "ai", badgeKey: "innovation" };
   }
-
   if (goal === "sales") {
-    const isEcom = sector === "ecommerce";
     return {
-      packKey: isEcom ? "ecom" : "conversion",
-      title: isEcom ? "Pack E-commerce Premium" : "Pack Conversion Pro",
-      desc: isEcom
-        ? "Boutique premium + tunnel optimisé + SEO produit."
-        : "Site haute conversion + SEO + tracking complet.",
-      price: isEcom ? "à partir de 2 490€" : "à partir de 1 890€",
-      services: isEcom
-        ? ["Site e-commerce", "SEO", "Optimisation tunnel"]
-        : ["Site premium", "SEO", "Analytics"],
-      badge: "Best-seller",
+      packKey: sector === "ecommerce" ? "ecom" : "conversion",
+      badgeKey: "bestseller",
     };
   }
-
-  // leads
   return {
     packKey: "leadgen",
-    title: "Pack Génération de Leads",
-    desc: "Site magnétique + SEO + Maps + qualification IA = pipeline qualifié 24/7.",
-    price: "à partir de 1 990€ + 490€/mois",
-    services: ["Site premium", "SEO + Maps", "IA qualification"],
-    badge: urgency === "now" ? "Priorité absolue" : "Complet",
+    badgeKey: urgency === "now" ? "priority" : "complete",
   };
 }
-
-const ContactSchema = z.object({
-  name: z.string().trim().min(1, "Nom requis").max(120),
-  email: z.string().trim().email("Email invalide").max(200),
-  phone: z.string().trim().max(50).optional(),
-  company: z.string().trim().max(150).optional(),
-});
 
 export function DiagnosticQuiz() {
   const { t, language, currency } = useTranslation();
@@ -135,6 +93,13 @@ export function DiagnosticQuiz() {
   const [contact, setContact] = useState({ name: "", email: "", phone: "", company: "" });
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+
+  const ContactSchema = z.object({
+    name: z.string().trim().min(1, t("quiz.error.name")).max(120),
+    email: z.string().trim().email(t("quiz.error.email")).max(200),
+    phone: z.string().trim().max(50).optional(),
+    company: z.string().trim().max(150).optional(),
+  });
 
   const progress = ((step + 1) / 4) * 100;
   const reco = state.sector && state.goal && state.urgency ? recommend(state) : null;
@@ -163,7 +128,7 @@ export function DiagnosticQuiz() {
           company: parsed.data.company || null,
           sector: state.sector,
           service: reco.packKey,
-          message: `[Diagnostic] Pack: ${reco.title} | Objectif: ${state.goal} | Urgence: ${state.urgency}`,
+          message: `[Diagnostic] Pack: ${t(`quiz.pack.${reco.packKey}.title`)} | Goal: ${state.goal} | Urgency: ${state.urgency}`,
           source: "diagnostic",
           language,
           currency,
@@ -171,12 +136,12 @@ export function DiagnosticQuiz() {
       });
       if (res?.success) {
         setDone(true);
-        toast.success("Diagnostic envoyé ! Nous vous recontactons sous 24h.");
+        toast.success(t("quiz.success.toast"));
       } else {
-        toast.error("Erreur lors de l'envoi. Réessayez.");
+        toast.error(t("quiz.error.send"));
       }
     } catch {
-      toast.error("Erreur réseau. Réessayez.");
+      toast.error(t("quiz.error.network"));
     } finally {
       setSubmitting(false);
     }
@@ -187,22 +152,21 @@ export function DiagnosticQuiz() {
       <div className="mx-auto max-w-2xl text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-border/60 glass px-4 py-1.5 text-xs font-medium text-foreground/80">
           <Sparkles className="h-3 w-3 text-primary" />
-          Diagnostic gratuit · 60 secondes
+          {t("quiz.eyebrow")}
         </span>
         <h2 className="mt-6 text-4xl font-extrabold tracking-tight md:text-5xl">
-          <span className="text-gradient">Quel pack vous correspond ?</span>
+          <span className="text-gradient">{t("quiz.title")}</span>
         </h2>
-        <p className="mt-4 text-lg text-muted-foreground">
-          Répondez à 3 questions, recevez une recommandation sur-mesure et un audit offert.
-        </p>
+        <p className="mt-4 text-lg text-muted-foreground">{t("quiz.subtitle")}</p>
       </div>
 
       <div className="mt-12 overflow-hidden rounded-3xl border border-border/60 gradient-card p-8 md:p-12">
-        {/* Progress bar */}
         {!done && (
           <div className="mb-8">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Étape {Math.min(step + 1, 4)} / 4</span>
+              <span>
+                {t("quiz.step")} {Math.min(step + 1, 4)} {t("quiz.of")} 4
+              </span>
               <span>{Math.round(progress)}%</span>
             </div>
             <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-border/40">
@@ -217,7 +181,6 @@ export function DiagnosticQuiz() {
         )}
 
         <AnimatePresence mode="wait">
-          {/* STEP 0: SECTOR */}
           {step === 0 && (
             <motion.div
               key="sector"
@@ -226,12 +189,10 @@ export function DiagnosticQuiz() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h3 className="text-2xl font-bold text-foreground">Votre secteur ?</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Pour adapter notre stratégie à votre marché.
-              </p>
+              <h3 className="text-2xl font-bold text-foreground">{t("quiz.q1.title")}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{t("quiz.q1.subtitle")}</p>
               <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {SECTORS.map(({ key, label, Icon }) => (
+                {SECTORS.map(({ key, Icon }) => (
                   <button
                     key={key}
                     onClick={() => {
@@ -247,14 +208,15 @@ export function DiagnosticQuiz() {
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg gradient-primary text-primary-foreground">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="text-sm font-medium text-foreground">{label}</span>
+                    <span className="text-sm font-medium text-foreground">
+                      {t(`quiz.sector.${key}`)}
+                    </span>
                   </button>
                 ))}
               </div>
             </motion.div>
           )}
 
-          {/* STEP 1: GOAL */}
           {step === 1 && (
             <motion.div
               key="goal"
@@ -263,12 +225,10 @@ export function DiagnosticQuiz() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h3 className="text-2xl font-bold text-foreground">Votre objectif principal ?</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Le KPI numéro 1 que vous voulez faire exploser.
-              </p>
+              <h3 className="text-2xl font-bold text-foreground">{t("quiz.q2.title")}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{t("quiz.q2.subtitle")}</p>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                {GOALS.map(({ key, label, desc, Icon }) => (
+                {GOALS.map(({ key, Icon }) => (
                   <button
                     key={key}
                     onClick={() => {
@@ -285,8 +245,12 @@ export function DiagnosticQuiz() {
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-foreground">{label}</div>
-                      <div className="mt-1 text-xs text-muted-foreground">{desc}</div>
+                      <div className="text-sm font-semibold text-foreground">
+                        {t(`quiz.goal.${key}`)}
+                      </div>
+                      <div className="mt-1 text-xs text-muted-foreground">
+                        {t(`quiz.goal.${key}.desc`)}
+                      </div>
                     </div>
                   </button>
                 ))}
@@ -294,7 +258,6 @@ export function DiagnosticQuiz() {
             </motion.div>
           )}
 
-          {/* STEP 2: URGENCY */}
           {step === 2 && (
             <motion.div
               key="urgency"
@@ -303,12 +266,10 @@ export function DiagnosticQuiz() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h3 className="text-2xl font-bold text-foreground">Quelle urgence ?</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Pour prioriser votre dossier dans notre planning.
-              </p>
+              <h3 className="text-2xl font-bold text-foreground">{t("quiz.q3.title")}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{t("quiz.q3.subtitle")}</p>
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                {URGENCIES.map(({ key, label, desc, Icon }) => (
+                {URGENCIES.map(({ key, Icon }) => (
                   <button
                     key={key}
                     onClick={() => {
@@ -325,8 +286,12 @@ export function DiagnosticQuiz() {
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-foreground">{label}</div>
-                      <div className="mt-1 text-xs text-muted-foreground">{desc}</div>
+                      <div className="text-sm font-semibold text-foreground">
+                        {t(`quiz.urgency.${key}`)}
+                      </div>
+                      <div className="mt-1 text-xs text-muted-foreground">
+                        {t(`quiz.urgency.${key}.desc`)}
+                      </div>
                     </div>
                   </button>
                 ))}
@@ -334,7 +299,6 @@ export function DiagnosticQuiz() {
             </motion.div>
           )}
 
-          {/* STEP 3: RECOMMENDATION + CONTACT */}
           {step === 3 && reco && !done && (
             <motion.div
               key="reco"
@@ -347,18 +311,24 @@ export function DiagnosticQuiz() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center gap-1 rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold text-primary">
                     <Sparkles className="h-3 w-3" />
-                    {reco.badge}
+                    {t(`quiz.badge.${reco.badgeKey}`)}
                   </span>
-                  <span className="text-xs text-muted-foreground">Recommandation personnalisée</span>
+                  <span className="text-xs text-muted-foreground">{t("quiz.reco.badge")}</span>
                 </div>
-                <h3 className="mt-4 text-3xl font-extrabold text-foreground">{reco.title}</h3>
-                <p className="mt-2 text-muted-foreground">{reco.desc}</p>
-                <div className="mt-4 text-2xl font-bold text-gradient">{reco.price}</div>
+                <h3 className="mt-4 text-3xl font-extrabold text-foreground">
+                  {t(`quiz.pack.${reco.packKey}.title`)}
+                </h3>
+                <p className="mt-2 text-muted-foreground">
+                  {t(`quiz.pack.${reco.packKey}.desc`)}
+                </p>
+                <div className="mt-4 text-2xl font-bold text-gradient">
+                  {t(`quiz.pack.${reco.packKey}.price`)}
+                </div>
                 <ul className="mt-4 grid gap-2 sm:grid-cols-3">
-                  {reco.services.map((s) => (
+                  {(["s1", "s2", "s3"] as const).map((s) => (
                     <li key={s} className="flex items-center gap-2 text-sm text-foreground/90">
                       <CheckCircle2 className="h-4 w-4 text-primary" />
-                      {s}
+                      {t(`quiz.pack.${reco.packKey}.${s}`)}
                     </li>
                   ))}
                 </ul>
@@ -366,36 +336,36 @@ export function DiagnosticQuiz() {
 
               <div className="mt-8">
                 <h4 className="text-lg font-semibold text-foreground">
-                  Recevez votre audit offert + chiffrage détaillé
+                  {t("quiz.reco.contactTitle")}
                 </h4>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Réponse personnalisée sous 24h. Sans engagement.
+                  {t("quiz.reco.contactSubtitle")}
                 </p>
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
                   <input
                     type="text"
-                    placeholder="Nom complet *"
+                    placeholder={t("quiz.field.name")}
                     value={contact.name}
                     onChange={(e) => setContact({ ...contact, name: e.target.value })}
                     className="rounded-xl border border-border/60 bg-card/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
                   />
                   <input
                     type="email"
-                    placeholder="Email *"
+                    placeholder={t("quiz.field.email")}
                     value={contact.email}
                     onChange={(e) => setContact({ ...contact, email: e.target.value })}
                     className="rounded-xl border border-border/60 bg-card/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
                   />
                   <input
                     type="tel"
-                    placeholder="Téléphone (optionnel)"
+                    placeholder={t("quiz.field.phone")}
                     value={contact.phone}
                     onChange={(e) => setContact({ ...contact, phone: e.target.value })}
                     className="rounded-xl border border-border/60 bg-card/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
                   />
                   <input
                     type="text"
-                    placeholder="Entreprise (optionnel)"
+                    placeholder={t("quiz.field.company")}
                     value={contact.company}
                     onChange={(e) => setContact({ ...contact, company: e.target.value })}
                     className="rounded-xl border border-border/60 bg-card/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
@@ -406,7 +376,7 @@ export function DiagnosticQuiz() {
                     onClick={() => setStep(2)}
                     className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
                   >
-                    <ArrowLeft className="h-4 w-4" /> Modifier mes réponses
+                    <ArrowLeft className="h-4 w-4" /> {t("quiz.reco.back")}
                   </button>
                   <button
                     onClick={handleSubmit}
@@ -415,11 +385,11 @@ export function DiagnosticQuiz() {
                   >
                     {submitting ? (
                       <>
-                        <Loader2 className="h-4 w-4 animate-spin" /> Envoi...
+                        <Loader2 className="h-4 w-4 animate-spin" /> {t("quiz.reco.sending")}
                       </>
                     ) : (
                       <>
-                        Recevoir mon audit
+                        {t("quiz.reco.submit")}
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </>
                     )}
@@ -429,7 +399,6 @@ export function DiagnosticQuiz() {
             </motion.div>
           )}
 
-          {/* DONE */}
           {done && (
             <motion.div
               key="done"
@@ -441,16 +410,21 @@ export function DiagnosticQuiz() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full gradient-primary text-primary-foreground shadow-glow">
                 <CheckCircle2 className="h-8 w-8" />
               </div>
-              <h3 className="mt-6 text-3xl font-extrabold text-foreground">Diagnostic envoyé !</h3>
+              <h3 className="mt-6 text-3xl font-extrabold text-foreground">
+                {t("quiz.done.title")}
+              </h3>
               <p className="mt-3 text-muted-foreground">
-                Notre équipe vous recontacte sous 24h avec votre audit personnalisé et le chiffrage du{" "}
-                <span className="font-semibold text-foreground">{reco?.title}</span>.
+                {t("quiz.done.subtitle")}{" "}
+                <span className="font-semibold text-foreground">
+                  {reco ? t(`quiz.pack.${reco.packKey}.title`) : ""}
+                </span>
+                .
               </p>
               <button
                 onClick={reset}
                 className="mt-8 inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-6 py-3 text-sm font-semibold text-foreground transition hover:bg-card"
               >
-                Refaire le diagnostic
+                {t("quiz.done.restart")}
               </button>
             </motion.div>
           )}
