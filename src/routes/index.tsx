@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { ArrowRight, Sparkles, Globe, Search, MapPin, Palette, Users, Bot, Cpu, Server, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "@/contexts/LanguageContext";
 import { services } from "@/data/services";
+import { DiagnosticQuiz } from "@/components/common/DiagnosticQuiz";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Globe, Search, MapPin, Palette, Users, Bot, Cpu, Server,
