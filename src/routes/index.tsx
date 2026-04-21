@@ -245,14 +245,22 @@ function HomePage() {
               {t("hero.eyebrow")}
             </motion.span>
 
-            <h1 className="mt-10 text-5xl font-extrabold leading-[0.95] tracking-tight md:text-7xl lg:text-[8rem]">
+            <h1 className="mt-10 text-4xl font-extrabold leading-[1] tracking-tight sm:text-5xl md:text-7xl lg:text-[7rem]">
               <motion.span
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.9 }}
                 className="block text-gradient"
               >
-                {t("hero.title")}
+                Votre
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.45, duration: 0.9 }}
+                className="mt-2 block"
+              >
+                <MorphingWord words={["visibilité.", "croissance.", "domination.", "influence."]} />
               </motion.span>
             </h1>
 
