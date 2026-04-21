@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { useTranslation } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/common/LanguageSelector";
 import { services } from "@/data/services";
+import logoXragency from "@/assets/logo-xragency.png";
 
 export function Header() {
   const { t } = useTranslation();
