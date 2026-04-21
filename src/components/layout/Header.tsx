@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { useTranslation } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/common/LanguageSelector";
 import { services } from "@/data/services";
+import logoXragency from "@/assets/logo-xragency.png";
 
 export function Header() {
   const { t } = useTranslation();
@@ -25,8 +26,13 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
-        <Link to="/" className="text-xl font-extrabold tracking-tight text-gradient">
-          XRAGENCY
+        <Link to="/" className="flex items-center" aria-label="XRAGENCY — Accueil">
+          <img
+            src={logoXragency}
+            alt="XRAGENCY"
+            className="h-6 w-auto md:h-7 select-none"
+            draggable={false}
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
