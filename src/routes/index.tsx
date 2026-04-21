@@ -114,6 +114,34 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   return <span ref={ref}>{val}{suffix}</span>;
 }
 
+/* ───────── Morphing rotating word ───────── */
+function MorphingWord({ words }: { words: string[] }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % words.length), 2400);
+    return () => clearInterval(id);
+  }, [words.length]);
+  return (
+    <span className="relative inline-block align-baseline">
+      <span className="invisible whitespace-nowrap" aria-hidden>
+        {words.reduce((a, b) => (a.length > b.length ? a : b))}
+      </span>
+      <span className="absolute inset-0 flex items-center justify-center">
+        <motion.span
+          key={words[i]}
+          initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -30, filter: "blur(12px)" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-gradient-primary whitespace-nowrap"
+        >
+          {words[i]}
+        </motion.span>
+      </span>
+    </span>
+  );
+}
+
 function HomePage() {
   const { t } = useTranslation();
   const heroRef = useRef<HTMLElement>(null);
