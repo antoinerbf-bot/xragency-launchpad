@@ -24,6 +24,7 @@ import { DiagnosticQuiz } from "@/components/common/DiagnosticQuiz";
 import heroImg from "@/assets/hero-cinematic.jpg";
 import workspaceImg from "@/assets/showcase-workspace.jpg";
 import orbImg from "@/assets/orb-energy.jpg";
+import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Globe, Search, MapPin, Palette, Users, Bot, Cpu, Server,
