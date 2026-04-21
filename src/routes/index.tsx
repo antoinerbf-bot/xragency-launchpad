@@ -24,6 +24,7 @@ import { DiagnosticQuiz } from "@/components/common/DiagnosticQuiz";
 import heroImg from "@/assets/hero-cinematic.jpg";
 import workspaceImg from "@/assets/showcase-workspace.jpg";
 import orbImg from "@/assets/orb-energy.jpg";
+import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Globe, Search, MapPin, Palette, Users, Bot, Cpu, Server,
@@ -113,6 +114,34 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   return <span ref={ref}>{val}{suffix}</span>;
 }
 
+/* ───────── Morphing rotating word ───────── */
+function MorphingWord({ words }: { words: string[] }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % words.length), 2400);
+    return () => clearInterval(id);
+  }, [words.length]);
+  return (
+    <span className="relative inline-block align-baseline">
+      <span className="invisible whitespace-nowrap" aria-hidden>
+        {words.reduce((a, b) => (a.length > b.length ? a : b))}
+      </span>
+      <span className="absolute inset-0 flex items-center justify-center">
+        <motion.span
+          key={words[i]}
+          initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -30, filter: "blur(12px)" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-gradient-primary whitespace-nowrap"
+        >
+          {words[i]}
+        </motion.span>
+      </span>
+    </span>
+  );
+}
+
 function HomePage() {
   const { t } = useTranslation();
   const heroRef = useRef<HTMLElement>(null);
@@ -142,18 +171,23 @@ function HomePage() {
         }}
         className="relative min-h-[100vh] overflow-hidden"
       >
-        {/* Layer 1 — background image */}
+        {/* Layer 1 — background video (with image fallback poster) */}
         <motion.div
           style={{ y: yBg, scale, opacity, x: heroX }}
           className="absolute inset-0 -z-10"
         >
-          <img
-            src={heroImg}
-            alt=""
-            className="h-full w-full object-cover opacity-60"
-            fetchPriority="high"
+          <video
+            src={heroVideoAsset.url}
+            poster={heroImg}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="h-full w-full object-cover opacity-70"
+            aria-hidden="true"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/55 to-background" />
         </motion.div>
 
         {/* Layer 2 — orbs */}
@@ -211,14 +245,22 @@ function HomePage() {
               {t("hero.eyebrow")}
             </motion.span>
 
-            <h1 className="mt-10 text-5xl font-extrabold leading-[0.95] tracking-tight md:text-7xl lg:text-[8rem]">
+            <h1 className="mt-10 text-4xl font-extrabold leading-[1] tracking-tight sm:text-5xl md:text-7xl lg:text-[7rem]">
               <motion.span
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.9 }}
                 className="block text-gradient"
               >
-                {t("hero.title")}
+                Votre
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.45, duration: 0.9 }}
+                className="mt-2 block"
+              >
+                <MorphingWord words={["visibilité.", "croissance.", "domination.", "influence."]} />
               </motion.span>
             </h1>
 
