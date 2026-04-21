@@ -171,18 +171,23 @@ function HomePage() {
         }}
         className="relative min-h-[100vh] overflow-hidden"
       >
-        {/* Layer 1 — background image */}
+        {/* Layer 1 — background video (with image fallback poster) */}
         <motion.div
           style={{ y: yBg, scale, opacity, x: heroX }}
           className="absolute inset-0 -z-10"
         >
-          <img
-            src={heroImg}
-            alt=""
-            className="h-full w-full object-cover opacity-60"
-            fetchPriority="high"
+          <video
+            src={heroVideoAsset.url}
+            poster={heroImg}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="h-full w-full object-cover opacity-70"
+            aria-hidden="true"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/55 to-background" />
         </motion.div>
 
         {/* Layer 2 — orbs */}
