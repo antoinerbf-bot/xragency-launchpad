@@ -74,10 +74,11 @@ function Tilt3D({ children, className = "" }: { children: React.ReactNode; class
 }
 
 /* ───────── Spotlight that follows the cursor ───────── */
-function Spotlight() {
+function Spotlight({ color = "blue" }: { color?: "blue" | "purple" }) {
   const mx = useMotionValue(50);
   const my = useMotionValue(50);
-  const bg = useMotionTemplate`radial-gradient(600px circle at ${mx}% ${my}%, oklch(0.65 0.22 265 / 0.15), transparent 40%)`;
+  const c = color === "purple" ? "oklch(0.55 0.28 295 / 0.18)" : "oklch(0.58 0.25 260 / 0.18)";
+  const bg = useMotionTemplate`radial-gradient(700px circle at ${mx}% ${my}%, ${c}, transparent 45%)`;
   return (
     <motion.div
       onMouseMove={(e) => {
@@ -86,7 +87,7 @@ function Spotlight() {
         my.set(((e.clientY - r.top) / r.height) * 100);
       }}
       style={{ background: bg }}
-      className="pointer-events-auto absolute inset-0"
+      className="pointer-events-auto absolute inset-0 z-0"
     />
   );
 }
@@ -197,28 +198,34 @@ function HomePage() {
           <div className="absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-accent-blue/20 blur-[100px]" />
         </motion.div>
 
-        {/* Layer 3 — floating particles */}
+        {/* Layer 3 — floating particles (blue + purple, glowing) */}
         <div className="pointer-events-none absolute inset-0 -z-10">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute h-1 w-1 rounded-full bg-primary/60"
-              style={{
-                left: `${(i * 53) % 100}%`,
-                top: `${(i * 37) % 100}%`,
-              }}
-              animate={{
-                y: [0, -30, 0],
-                opacity: [0.2, 1, 0.2],
-              }}
-              transition={{
-                duration: 3 + (i % 4),
-                repeat: Infinity,
-                delay: i * 0.2,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
+          {Array.from({ length: 32 }).map((_, i) => {
+            const purple = i % 3 === 0;
+            return (
+              <motion.div
+                key={i}
+                className={`absolute rounded-full ${purple ? "h-1.5 w-1.5 bg-accent-purple/80" : "h-1 w-1 bg-primary/80"}`}
+                style={{
+                  left: `${(i * 53) % 100}%`,
+                  top: `${(i * 37) % 100}%`,
+                  boxShadow: purple
+                    ? "0 0 12px oklch(0.55 0.28 295 / 0.9)"
+                    : "0 0 10px oklch(0.58 0.25 260 / 0.9)",
+                }}
+                animate={{
+                  y: [0, -40, 0],
+                  opacity: [0.15, 1, 0.15],
+                }}
+                transition={{
+                  duration: 4 + (i % 5),
+                  repeat: Infinity,
+                  delay: i * 0.15,
+                  ease: "easeInOut",
+                }}
+              />
+            );
+          })}
         </div>
 
         {/* Foreground content */}
